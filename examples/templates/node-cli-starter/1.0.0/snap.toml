@@ -1,0 +1,10 @@
+[template]
+name = "node-cli-starter"
+version = "1.0.0"
+description = "A minimal Node.js CLI entry point."
+
+[[variables]]
+name = "name"
+prompt = "Project name (lowercase, hyphens allowed)"
+type = "string"
+validate = "^[a-z][a-z0-9-]*$"

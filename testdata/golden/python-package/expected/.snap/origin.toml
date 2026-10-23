@@ -1,0 +1,7 @@
+template = "python-template"
+version = "0.1.0"
+source = "local"
+generated_at = 2026-01-01T00:00:00Z
+
+[variables]
+  name = "csv-tools"

@@ -1,0 +1,32 @@
+[template]
+name = "api-service"
+version = "1.0.0"
+description = "A minimal Go HTTP API service, with an optional Docker setup."
+
+[[variables]]
+name = "name"
+prompt = "Service name (lowercase, hyphens allowed)"
+type = "string"
+validate = "^[a-z][a-z0-9-]*$"
+
+[[variables]]
+name = "port"
+prompt = "Port to listen on"
+type = "int"
+default = 8080
+
+[[optional]]
+name = "docker"
+prompt = "Include a Dockerfile and docker-compose.yml?"
+default = true
+paths = ["Dockerfile", "docker-compose.yml"]
+
+[[hooks.post]]
+run = "git init"
+
+[test]
+check = "go build ./..."
+
+[test.vars]
+name = "sample-service"
+port = "8080"

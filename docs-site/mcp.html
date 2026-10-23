@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>snap — MCP server</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="layout">
+<nav>
+  <strong>snap</strong>
+  <div style="margin-top: 1rem">
+    <a href="index.html">Overview</a>
+    <a href="quickstart.html">Quickstart</a>
+    <a href="cli.html">CLI reference</a>
+    <a href="templates.html">Templates</a>
+    <a href="mcp.html" class="active">MCP server</a>
+  </div>
+  <div style="margin-top: 1.5rem">
+    <a href="https://github.com/CodeOne45/snap">GitHub ↗</a>
+  </div>
+</nav>
+<main>
+  <h1>MCP server</h1>
+  <p><code>snap mcp</code> runs over stdio and exposes the same core use cases as
+  the CLI to an agent: same safety guarantees (path-escape rejection,
+  non-empty-target refusal), same JSON shapes as <code>--json</code>.</p>
+
+  <h2>Connecting an agent</h2>
+  <p>Add to your MCP client's config (e.g. <code>.mcp.json</code>):</p>
+  <pre><code>{
+  "mcpServers": {
+    "snap": {
+      "command": "snap",
+      "args": ["mcp"]
+    }
+  }
+}</code></pre>
+
+  <h2>Tools</h2>
+  <table>
+    <tr><th>Tool</th><th>What it does</th><th>Side effects</th></tr>
+    <tr><td><code>list_templates</code></td><td>List templates, optionally filtered by a substring of name/description</td><td>None</td></tr>
+    <tr><td><code>describe_template</code></td><td>A template's variables and raw file tree</td><td>None</td></tr>
+    <tr><td><code>plan_project</code></td><td>Resolve variables + toggles and build the write plan. <code>template</code> may be a remote reference</td><td>None locally; may fetch/cache a remote template's commit</td></tr>
+    <tr><td><code>create_project</code></td><td>Generate a project. <code>allow_hooks: true</code> required to run any hooks</td><td>Writes files; runs hooks only if allowed</td></tr>
+    <tr><td><code>capture_template</code></td><td>Scan a project, propose scored placeholder candidates</td><td>None</td></tr>
+    <tr><td><code>save_template</code></td><td>Re-scan and save only the accepted candidates as a template</td><td>Writes files</td></tr>
+  </table>
+
+  <h2>Resources &amp; prompts</h2>
+  <p>Resources: <code>template://&lt;name&gt;/snap.toml</code> and <code>template://&lt;name&gt;/README.md</code>.
+  Prompt: <code>new-project</code> (describe → ask for missing variables → plan → confirm → create).</p>
+
+  <h2>What's different from the CLI</h2>
+  <ul>
+    <li><code>create_project</code>/<code>save_template</code> never prompt — a missing required variable is an immediate error.</li>
+    <li>Both refuse to write into an existing non-empty directory; there's no agent-facing <code>--force</code>.</li>
+    <li>Hook approval isn't remembered between calls — every <code>create_project</code> call states its own <code>allow_hooks</code> intent.</li>
+  </ul>
+
+  <h2>An agent, end to end</h2>
+  <p>A typical flow: <code>list_templates</code> → <code>describe_template</code> → <code>plan_project</code>
+  (preview) → <code>create_project</code> (write). This is exactly the sequence
+  this repo's own Gate&nbsp;2 test exercises against a real, shipped example
+  template, with no manual fixes to the output afterward.</p>
+</main>
+</div>
+</body>
+</html>

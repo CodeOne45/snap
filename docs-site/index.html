@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>snap</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="layout">
+<nav>
+  <strong>snap</strong>
+  <div style="margin-top: 1rem">
+    <a href="index.html" class="active">Overview</a>
+    <a href="quickstart.html">Quickstart</a>
+    <a href="cli.html">CLI reference</a>
+    <a href="templates.html">Templates</a>
+    <a href="mcp.html">MCP server</a>
+  </div>
+  <div style="margin-top: 1.5rem">
+    <a href="https://github.com/CodeOne45/snap">GitHub ↗</a>
+  </div>
+</nav>
+<main>
+  <h1>snap</h1>
+  <p>Capture existing projects as templates, and generate new projects from them.</p>
+
+  <p><code>snap capture</code> turns a real project into a reusable template: it scans the
+  project, proposes which strings look like the project's own name (or other
+  per-project identifiers), and lets you accept, rename, or reject each one
+  before writing a template manifest. <code>snap new</code> runs the reverse: fill in
+  the template's variables and it renders a brand-new project.</p>
+
+  <h2>Why</h2>
+  <p>Most "project generator" tools require you to author a template from
+  scratch in some bespoke DSL. snap instead starts from a project you
+  already have working — it detects what should be a variable instead of
+  asking you to mark it up by hand.</p>
+
+  <h2>Install</h2>
+  <pre><code>git clone https://github.com/CodeOne45/snap
+cd snap
+make build
+./snap --version</code></pre>
+  <p class="muted">Or via a package manager, once a release is published — see the
+  <a href="https://github.com/CodeOne45/snap#install--build">README</a>.</p>
+
+  <h2>Three ways in</h2>
+  <ul>
+    <li><strong>CLI</strong> — <code>snap capture</code>, <code>snap new</code>, <code>snap list</code>, <code>snap show</code>.</li>
+    <li><strong>TUI</strong> — run <code>snap</code> with no arguments for an interactive wizard.</li>
+    <li><strong>MCP server</strong> — <code>snap mcp</code> exposes the same use cases to an agent over stdio.</li>
+  </ul>
+
+  <h2>Architecture, in one line</h2>
+  <p>Every command builds an immutable <em>plan</em> (what would be written) before
+  anything is applied; <code>--dry-run</code> and <code>--json</code> both just print that same plan
+  instead of applying it. The CLI, TUI, and MCP server are thin adapters
+  over the same core use cases — no logic is duplicated between them.</p>
+</main>
+</div>
+</body>
+</html>

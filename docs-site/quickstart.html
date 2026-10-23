@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>snap — Quickstart</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="layout">
+<nav>
+  <strong>snap</strong>
+  <div style="margin-top: 1rem">
+    <a href="index.html">Overview</a>
+    <a href="quickstart.html" class="active">Quickstart</a>
+    <a href="cli.html">CLI reference</a>
+    <a href="templates.html">Templates</a>
+    <a href="mcp.html">MCP server</a>
+  </div>
+  <div style="margin-top: 1.5rem">
+    <a href="https://github.com/CodeOne45/snap">GitHub ↗</a>
+  </div>
+</nav>
+<main>
+  <h1>Quickstart</h1>
+
+  <h2>Try a shipped example first</h2>
+  <p>snap ships a few ready-made templates under
+  <code>examples/templates/</code> in the repo — copy one into your local
+  template store to try <code>snap new</code> immediately, with nothing to capture first:</p>
+  <pre><code>cp -r examples/templates/go-cli-starter ~/.config/snap/templates/
+snap new go-cli-starter ~/code/my-cli --var name=my-cli --var module=github.com/you/my-cli</code></pre>
+
+  <h2>Capture a project of your own</h2>
+  <pre><code># Preview what would be captured, without writing anything
+snap capture ~/code/acme-site --as client-site --dry-run
+
+# Capture non-interactively, accepting every detected candidate
+snap capture ~/code/acme-site --as client-site --yes
+
+# Capture interactively: accept, rename, or reject each candidate
+snap capture ~/code/acme-site --as client-site</code></pre>
+  <p>Capture scans the project, builds a list of placeholder <em>candidates</em>
+  (strings that look like the project's own name or other per-project
+  identifiers), and writes a <code>snap.toml</code> manifest alongside the
+  renamed files. It never captures secrets (<code>.env*</code>, <code>*.pem</code>,
+  <code>*.key</code>, <code>id_rsa*</code> are excluded by default).</p>
+
+  <h2>Inspect what's available</h2>
+  <pre><code>snap list
+snap list --json
+snap show client-site
+snap show client-site --json</code></pre>
+
+  <h2>Generate a new project</h2>
+  <pre><code>snap new client-site ~/code/northwind-site --var name=northwind-site
+snap new client-site ~/code/northwind-site --dry-run
+snap new client-site ~/code/northwind-site --yes    # error instead of prompting
+snap new client-site ~/code/northwind-site --force  # overwrite an existing non-empty target
+snap new client-site ~/code/northwind-site --without docker --with ci</code></pre>
+
+  <h2>Or skip the flags — use the TUI</h2>
+  <pre><code>snap</code></pre>
+  <p>Run <code>snap</code> with no arguments to browse templates, fill in variables, toggle
+  optional blocks, preview the generated file tree, and confirm, all
+  interactively.</p>
+</main>
+</div>
+</body>
+</html>

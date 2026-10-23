@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>snap — CLI reference</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="layout">
+<nav>
+  <strong>snap</strong>
+  <div style="margin-top: 1rem">
+    <a href="index.html">Overview</a>
+    <a href="quickstart.html">Quickstart</a>
+    <a href="cli.html" class="active">CLI reference</a>
+    <a href="templates.html">Templates</a>
+    <a href="mcp.html">MCP server</a>
+  </div>
+  <div style="margin-top: 1.5rem">
+    <a href="https://github.com/CodeOne45/snap">GitHub ↗</a>
+  </div>
+</nav>
+<main>
+  <h1>CLI reference</h1>
+
+  <h2>Commands</h2>
+  <table>
+    <tr><th>Command</th><th>What it does</th></tr>
+    <tr><td><code>snap capture &lt;source-dir&gt; --as &lt;name&gt;</code></td><td>Scan a project and save it as a template</td></tr>
+    <tr><td><code>snap new &lt;template&gt; &lt;target-dir&gt;</code></td><td>Generate a project from a template</td></tr>
+    <tr><td><code>snap list</code></td><td>List available templates</td></tr>
+    <tr><td><code>snap show &lt;template&gt;</code></td><td>A template's variables, optional blocks, and raw file tree</td></tr>
+    <tr><td><code>snap template bump &lt;name&gt; &lt;major|minor|patch&gt;</code></td><td>Create a new version of a template by bumping its latest version</td></tr>
+    <tr><td><code>snap update &lt;target-dir&gt;</code></td><td>Three-way merge a generated project up to its template's latest version</td></tr>
+    <tr><td><code>snap test &lt;template&gt;</code></td><td>Generate a template's declared sample and run its check command</td></tr>
+    <tr><td><code>snap status &lt;dir&gt;...</code></td><td>Report which template/version each project came from, and which are behind</td></tr>
+    <tr><td><code>snap mcp</code></td><td>Run as a Model Context Protocol server over stdio</td></tr>
+    <tr><td><code>snap</code> (no arguments)</td><td>Launch the interactive TUI wizard</td></tr>
+  </table>
+
+  <h2>Flags that work across commands</h2>
+  <table>
+    <tr><th>Flag</th><th>Effect</th></tr>
+    <tr><td><code>--dry-run</code></td><td>Print the plan without writing anything</td></tr>
+    <tr><td><code>--json</code></td><td>Print the plan/result as JSON instead of writing or printing human-readable text</td></tr>
+    <tr><td><code>--yes</code> / <code>-y</code></td><td>Never prompt: a missing required value is an immediate error</td></tr>
+    <tr><td><code>--force</code></td><td>(<code>new</code> only) remove an existing non-empty target directory first</td></tr>
+    <tr><td><code>--var key=value</code></td><td>(<code>new</code>) set a template variable, repeatable</td></tr>
+    <tr><td><code>--with name</code> / <code>--without name</code></td><td>(<code>new</code>) toggle an <code>[[optional]]</code> block, repeatable</td></tr>
+    <tr><td><code>--help</code>, <code>--version</code></td><td>Standard Cobra flags, on every command</td></tr>
+  </table>
+
+  <h2>Exit codes</h2>
+  <table>
+    <tr><th>Code</th><th>Meaning</th></tr>
+    <tr><td>0</td><td>Success</td></tr>
+    <tr><td>1</td><td>User error (bad input, missing variable, etc.)</td></tr>
+    <tr><td>2</td><td>Internal error</td></tr>
+  </table>
+
+  <h2>Remote templates</h2>
+  <p><code>&lt;template&gt;</code> also accepts a git-hosted reference in place of a local template name:</p>
+  <pre><code>snap new gh:acme/web-starter ~/code/site --var name=site
+snap new gh:acme/web-starter@v1.2.0 ~/code/site         # pinned to a tag
+snap new https://example.com/templates/api.git@abc1234 ~/code/api</code></pre>
+  <p>Unpinned, it resolves the remote's current default branch on every run; pinned, it's
+  reproducible fully offline once fetched once, from a local cache under
+  <code>~/.config/snap/cache/</code>.</p>
+
+  <p class="muted">Full JSON shapes and the <code>.snap/origin.toml</code> format are documented in
+  <a href="https://github.com/CodeOne45/snap/blob/main/docs/cli-json-contract.md">docs/cli-json-contract.md</a>.</p>
+</main>
+</div>
+</body>
+</html>

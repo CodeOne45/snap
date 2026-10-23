@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>snap — Templates</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="layout">
+<nav>
+  <strong>snap</strong>
+  <div style="margin-top: 1rem">
+    <a href="index.html">Overview</a>
+    <a href="quickstart.html">Quickstart</a>
+    <a href="cli.html">CLI reference</a>
+    <a href="templates.html" class="active">Templates</a>
+    <a href="mcp.html">MCP server</a>
+  </div>
+  <div style="margin-top: 1.5rem">
+    <a href="https://github.com/CodeOne45/snap">GitHub ↗</a>
+  </div>
+</nav>
+<main>
+  <h1>Templates</h1>
+  <p>A template is a plain directory: a <code>snap.toml</code> manifest plus the
+  captured files, with <code>{{placeholders}}</code> in both file content and
+  paths. Templates live under <code>~/.config/snap/templates/</code> and are
+  fully hand-editable.</p>
+
+  <h2>Manifest</h2>
+  <pre><code>[template]
+name = "api-starter"
+version = "1.0.0"
+description = "A minimal HTTP API service"
+
+[[variables]]
+name = "name"
+prompt = "Service name"
+type = "string"
+validate = "^[a-z][a-z0-9-]*$"
+
+[[variables]]
+name = "port"
+type = "int"
+default = 8080
+
+[[optional]]
+name = "docker"
+prompt = "Include a Dockerfile?"
+default = true
+paths = ["Dockerfile", "docker-compose.yml"]
+
+[[hooks.post]]
+run = "git init"</code></pre>
+
+  <h2>Variables</h2>
+  <p>Each declared variable has a <code>type</code> (<code>string</code> or
+  <code>int</code>), an optional <code>validate</code> regex (string only), and
+  an optional <code>default</code>. A variable with no default and no
+  explicit <code>--var</code> is either prompted for (interactively) or an
+  immediate error (<code>--yes</code>, or via MCP).</p>
+
+  <h2>Placeholder filters</h2>
+  <p>A placeholder can apply a filter: <code>{{name|pascal}}</code>,
+  <code>{{name|title}}</code>. Filters only change how a value is rendered at
+  each use site — the underlying resolved value is unaffected.</p>
+
+  <h2>Optional blocks</h2>
+  <p>Toggle one with <code>--with docker</code> / <code>--without docker</code>
+  (CLI, repeatable) or the <code>toggles</code> map (MCP). An unset block
+  falls back to its declared default. Every block's <em>resolved</em>
+  state — not just the ones explicitly set — is recorded in
+  <code>.snap/origin.toml</code>'s <code>[toggles]</code> table.</p>
+
+  <h2>Post-generate hooks</h2>
+  <p>A <code>[[hooks.post]]</code> block is a shell command that runs once the
+  target directory is fully written. Hooks never run silently: the CLI
+  asks for confirmation (remembered per template@version after the first
+  approval); MCP's <code>create_project</code> needs <code>allow_hooks:
+  true</code> on every call.</p>
+
+  <h2>Versioning</h2>
+  <p><code>[template].version</code> must be strict <code>MAJOR.MINOR.PATCH</code> semver — <code>snap capture</code> always starts a template at <code>0.1.0</code>. The local store keeps every version a template has ever had (one directory per version), so an old base stays available even after the template moves on.</p>
+  <pre><code>snap template bump client-site patch   # 1.0.0 -&gt; 1.0.1
+snap template bump client-site minor   # 1.0.1 -&gt; 1.1.0
+snap template bump client-site major   # 1.1.0 -&gt; 2.0.0</code></pre>
+  <p><code>snap new</code>/<code>snap show</code> resolve a bare name to its latest version, or pin an exact one with <code>name@version</code> (mirroring remote templates' <code>@tag</code>/<code>@commit</code> syntax):</p>
+  <pre><code>snap new client-site@1.0.0 ~/code/site --var name=site</code></pre>
+
+  <h2>Testing a template</h2>
+  <p>An optional <code>[test]</code> block lets a template author sanity-check it before anyone else generates from it:</p>
+  <pre><code>[test]
+check = "go build ./... &amp;&amp; go test ./..."
+
+[test.vars]
+name = "sample-project"
+port = "8080"</code></pre>
+  <pre><code>snap test client-site</code></pre>
+  <p><code>snap test</code> generates into a throwaway temp directory using <code>[test.vars]</code>, runs <code>check</code> there (the same mechanism as a post-generate hook), and exits with the check's result — usable as a CI step. A template with no <code>[test]</code> block can't be tested this way.</p>
+
+  <h2>Example templates</h2>
+  <p>This repo ships a few ready-made templates under
+  <code>examples/templates/</code>, demonstrating these features end to end:</p>
+  <table>
+    <tr><th>Template</th><th>Demonstrates</th></tr>
+    <tr><td><code>go-cli-starter</code></td><td>Required variables, no defaults</td></tr>
+    <tr><td><code>web-static-starter</code></td><td>An optional block (analytics snippet), off by default</td></tr>
+    <tr><td><code>api-service</code></td><td>An <code>int</code> variable, an optional block on by default, a post-generate hook</td></tr>
+    <tr><td><code>node-cli-starter</code></td><td>A minimal non-Go template</td></tr>
+  </table>
+  <pre><code>cp -r examples/templates/api-service ~/.config/snap/templates/</code></pre>
+</main>
+</div>
+</body>
+</html>

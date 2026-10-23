@@ -1,0 +1,22 @@
+[template]
+name = "web-static-starter"
+version = "1.0.0"
+description = "A minimal static HTML/CSS site, no build step."
+
+[[variables]]
+name = "name"
+prompt = "Project name (lowercase, hyphens allowed)"
+type = "string"
+validate = "^[a-z][a-z0-9-]*$"
+
+[[variables]]
+name = "title"
+prompt = "Page title"
+type = "string"
+default = "My Site"
+
+[[optional]]
+name = "analytics"
+prompt = "Include a Google Analytics snippet?"
+default = false
+paths = ["analytics.html"]

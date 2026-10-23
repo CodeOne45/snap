@@ -1,0 +1,8 @@
+[project]
+name = "data-utils"
+version = "0.1.0"
+description = "Utilities for data processing."
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"

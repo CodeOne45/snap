@@ -1,0 +1,72 @@
+version: 2
+
+project_name: snap
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: snap
+    main: ./cmd/snap
+    binary: snap
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w -X github.com/CodeOne45/snap/internal/adapters/cli.version={{.Version}}
+
+archives:
+  - id: snap
+    formats: [tar.gz]
+    name_template: >-
+      {{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    files:
+      - README.md
+      - LICENSE*
+
+checksum:
+  name_template: "checksums.txt"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^test:"
+      - "^chore:"
+
+homebrew_casks:
+  - name: snap
+    repository:
+      owner: CodeOne45
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+    directory: Casks
+    homepage: "https://github.com/CodeOne45/snap"
+    description: "Capture existing projects as templates and generate new ones from them."
+    license: "MIT"
+
+scoops:
+  - name: snap
+    repository:
+      owner: CodeOne45
+      name: scoop-bucket
+      token: "{{ .Env.SCOOP_BUCKET_GITHUB_TOKEN }}"
+    homepage: "https://github.com/CodeOne45/snap"
+    description: "Capture existing projects as templates and generate new ones from them."
+    license: "MIT"
+
+release:
+  github:
+    owner: CodeOne45
+    name: snap
+  prerelease: auto

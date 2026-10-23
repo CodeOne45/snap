@@ -1,0 +1,22 @@
+[template]
+name = "go-cli-starter"
+version = "1.0.0"
+description = "A minimal Go CLI, built with Cobra-free stdlib flag parsing."
+
+[[variables]]
+name = "name"
+prompt = "Project name (lowercase, hyphens allowed)"
+type = "string"
+validate = "^[a-z][a-z0-9-]*$"
+
+[[variables]]
+name = "module"
+prompt = "Go module path (e.g. github.com/youruser/your-project)"
+type = "string"
+
+[test]
+check = "go build ./..."
+
+[test.vars]
+name = "sample-project"
+module = "example.com/sample-project"
