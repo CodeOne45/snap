@@ -4,21 +4,25 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>snap — CLI reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="layout">
 <nav>
-  <strong>snap</strong>
-  <div style="margin-top: 1rem">
+  <span class="brand">snap</span>
+  <div class="links">
     <a href="index.html">Overview</a>
     <a href="quickstart.html">Quickstart</a>
     <a href="cli.html" class="active">CLI reference</a>
     <a href="templates.html">Templates</a>
+    <a href="recipes.html">Recipes</a>
     <a href="mcp.html">MCP server</a>
   </div>
-  <div style="margin-top: 1.5rem">
-    <a href="https://github.com/CodeOne45/snap">GitHub ↗</a>
+  <div class="external">
+    <a href="https://github.com/CodeOne45/snap">GitHub</a>
   </div>
 </nav>
 <main>
@@ -35,6 +39,9 @@
     <tr><td><code>snap update &lt;target-dir&gt;</code></td><td>Three-way merge a generated project up to its template's latest version</td></tr>
     <tr><td><code>snap test &lt;template&gt;</code></td><td>Generate a template's declared sample and run its check command</td></tr>
     <tr><td><code>snap status &lt;dir&gt;...</code></td><td>Report which template/version each project came from, and which are behind</td></tr>
+    <tr><td><code>snap add &lt;recipe&gt; [target-dir]</code></td><td>Apply a recipe (new files, dependency additions, env entries, hooks) to an existing project — defaults to the current directory</td></tr>
+    <tr><td><code>snap recipes</code></td><td>List available recipes (alias: <code>snap list --recipes</code>)</td></tr>
+    <tr><td><code>snap stats [--since 30d]</code></td><td>Totals of what Snap has written instead of the agent, by template/recipe and by source</td></tr>
     <tr><td><code>snap mcp</code></td><td>Run as a Model Context Protocol server over stdio</td></tr>
     <tr><td><code>snap</code> (no arguments)</td><td>Launch the interactive TUI wizard</td></tr>
   </table>
@@ -46,7 +53,7 @@
     <tr><td><code>--json</code></td><td>Print the plan/result as JSON instead of writing or printing human-readable text</td></tr>
     <tr><td><code>--yes</code> / <code>-y</code></td><td>Never prompt: a missing required value is an immediate error</td></tr>
     <tr><td><code>--force</code></td><td>(<code>new</code> only) remove an existing non-empty target directory first</td></tr>
-    <tr><td><code>--var key=value</code></td><td>(<code>new</code>) set a template variable, repeatable</td></tr>
+    <tr><td><code>--var key=value</code></td><td>(<code>new</code>, <code>add</code>) set a template/recipe variable, repeatable</td></tr>
     <tr><td><code>--with name</code> / <code>--without name</code></td><td>(<code>new</code>) toggle an <code>[[optional]]</code> block, repeatable</td></tr>
     <tr><td><code>--help</code>, <code>--version</code></td><td>Standard Cobra flags, on every command</td></tr>
   </table>

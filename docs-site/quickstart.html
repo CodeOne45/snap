@@ -4,21 +4,25 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>snap — Quickstart</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="layout">
 <nav>
-  <strong>snap</strong>
-  <div style="margin-top: 1rem">
+  <span class="brand">snap</span>
+  <div class="links">
     <a href="index.html">Overview</a>
     <a href="quickstart.html" class="active">Quickstart</a>
     <a href="cli.html">CLI reference</a>
     <a href="templates.html">Templates</a>
+    <a href="recipes.html">Recipes</a>
     <a href="mcp.html">MCP server</a>
   </div>
-  <div style="margin-top: 1.5rem">
-    <a href="https://github.com/CodeOne45/snap">GitHub ↗</a>
+  <div class="external">
+    <a href="https://github.com/CodeOne45/snap">GitHub</a>
   </div>
 </nav>
 <main>
@@ -58,6 +62,14 @@ snap new client-site ~/code/northwind-site --dry-run
 snap new client-site ~/code/northwind-site --yes    # error instead of prompting
 snap new client-site ~/code/northwind-site --force  # overwrite an existing non-empty target
 snap new client-site ~/code/northwind-site --without docker --with ci</code></pre>
+
+  <h2>Apply a recipe to a project you already have</h2>
+  <pre><code>snap recipes                       # see what's available
+snap add sentry                    # apply to the current directory
+snap add sentry ~/code/other-site --var service=payments
+snap add sentry --dry-run</code></pre>
+  <p>Unlike a template, a recipe modifies an <em>existing</em> project: new files,
+  dependency edits, env entries. See <a href="recipes.html">Recipes</a> for the format.</p>
 
   <h2>Or skip the flags — use the TUI</h2>
   <pre><code>snap</code></pre>

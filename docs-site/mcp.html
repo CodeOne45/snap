@@ -4,21 +4,25 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>snap — MCP server</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="layout">
 <nav>
-  <strong>snap</strong>
-  <div style="margin-top: 1rem">
+  <span class="brand">snap</span>
+  <div class="links">
     <a href="index.html">Overview</a>
     <a href="quickstart.html">Quickstart</a>
     <a href="cli.html">CLI reference</a>
     <a href="templates.html">Templates</a>
+    <a href="recipes.html">Recipes</a>
     <a href="mcp.html" class="active">MCP server</a>
   </div>
-  <div style="margin-top: 1.5rem">
-    <a href="https://github.com/CodeOne45/snap">GitHub ↗</a>
+  <div class="external">
+    <a href="https://github.com/CodeOne45/snap">GitHub</a>
   </div>
 </nav>
 <main>
@@ -43,8 +47,8 @@
     <tr><th>Tool</th><th>What it does</th><th>Side effects</th></tr>
     <tr><td><code>list_templates</code></td><td>List templates, optionally filtered by a substring of name/description</td><td>None</td></tr>
     <tr><td><code>describe_template</code></td><td>A template's variables and raw file tree</td><td>None</td></tr>
-    <tr><td><code>plan_project</code></td><td>Resolve variables + toggles and build the write plan. <code>template</code> may be a remote reference</td><td>None locally; may fetch/cache a remote template's commit</td></tr>
-    <tr><td><code>create_project</code></td><td>Generate a project. <code>allow_hooks: true</code> required to run any hooks</td><td>Writes files; runs hooks only if allowed</td></tr>
+    <tr><td><code>plan_project</code></td><td>Resolve variables + toggles and build the write plan. <code>template</code> may be a remote reference. Response includes a <code>stats</code> field (file/byte/approx-token counts)</td><td>None locally; may fetch/cache a remote template's commit</td></tr>
+    <tr><td><code>create_project</code></td><td>Generate a project. <code>allow_hooks: true</code> required to run any hooks. Response includes <code>stats</code></td><td>Writes files; runs hooks only if allowed; appends a usage-log entry</td></tr>
     <tr><td><code>capture_template</code></td><td>Scan a project, propose scored placeholder candidates</td><td>None</td></tr>
     <tr><td><code>save_template</code></td><td>Re-scan and save only the accepted candidates as a template</td><td>Writes files</td></tr>
   </table>
@@ -65,6 +69,12 @@
   (preview) → <code>create_project</code> (write). This is exactly the sequence
   this repo's own Gate&nbsp;2 test exercises against a real, shipped example
   template, with no manual fixes to the output afterward.</p>
+
+  <h2>Recipes over MCP</h2>
+  <p>Recipes (<a href="recipes.html"><code>snap add</code></a>) don't have MCP tools yet —
+  today an agent applies one via the CLI. Equivalent tools
+  (<code>plan_recipe</code>, <code>apply_recipe</code>, <code>list_recipes</code>) are planned
+  next, matching <code>plan_project</code>/<code>create_project</code>'s shape.</p>
 </main>
 </div>
 </body>

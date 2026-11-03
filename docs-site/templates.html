@@ -4,21 +4,25 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>snap — Templates</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="layout">
 <nav>
-  <strong>snap</strong>
-  <div style="margin-top: 1rem">
+  <span class="brand">snap</span>
+  <div class="links">
     <a href="index.html">Overview</a>
     <a href="quickstart.html">Quickstart</a>
     <a href="cli.html">CLI reference</a>
     <a href="templates.html" class="active">Templates</a>
+    <a href="recipes.html">Recipes</a>
     <a href="mcp.html">MCP server</a>
   </div>
-  <div style="margin-top: 1.5rem">
-    <a href="https://github.com/CodeOne45/snap">GitHub ↗</a>
+  <div class="external">
+    <a href="https://github.com/CodeOne45/snap">GitHub</a>
   </div>
 </nav>
 <main>
@@ -26,7 +30,8 @@
   <p>A template is a plain directory: a <code>snap.toml</code> manifest plus the
   captured files, with <code>{{placeholders}}</code> in both file content and
   paths. Templates live under <code>~/.config/snap/templates/</code> and are
-  fully hand-editable.</p>
+  fully hand-editable. For changes to a project you already have, see
+  <a href="recipes.html">Recipes</a> instead.</p>
 
   <h2>Manifest</h2>
   <pre><code>[template]
