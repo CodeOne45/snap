@@ -1,26 +1,29 @@
 # Snap
 
-Capture your best project once. Every new one, yours or your coding agent's, starts from it.
+Your coding agent keeps re-deriving things it already solved. Ask it to scaffold "a service like the other ones," or wire up Sentry/Docker/CI for the fifth time this month, and it regenerates the boilerplate from scratch, burns tokens doing it, and occasionally gets some case form of the project name wrong. Snap turns a verified project or change into something you — or the agent — apply deterministically instead of paying a model to re-derive it.
 
-[Full docs](https://codeone45.github.io/snap/) (built from `docs-site/`) · [Example templates](examples/templates/)
-
-Snap scans an existing project, detects the identifiers that make it "that specific project" (its name, in every case form it appears in — kebab, snake, PascalCase, camelCase, UPPER_CASE, Title Case), turns them into a reusable template, and lets you (or an agent) generate new projects from it with one command.
-
-## Why
-
-The usual way to start a new project from an old one is `cp -r acme-site northwind-site`, then grep for "acme" and fix the matches by hand across a dozen case forms and file names. Something always gets missed. Snap replaces that with a capture/generate pipeline:
+[Full docs](https://codeone45.github.io/snap/) (built from `docs-site/`) · [Example templates](examples/templates/) · [MCP server](#mcp-server)
 
 ```
-$ snap capture ./acme-site --as client-site --yes
-Ignored: node_modules, .next, .git, .env
-✓ Template "client-site" saved (2 variables)
+$ snap new api-service northwind-payments --var name=northwind-payments
+✓ 31 files · 42.0 KB · ~11.8k tokens written by Snap instead of the agent
 
-$ snap new client-site northwind-site --var name=northwind-site
+$ snap add sentry northwind-payments --var service=payments
+✓ 4 files · 329 B · ~132 tokens written by Snap instead of the agent
 ```
 
-- **Capture, not authoring.** Point it at a real project; it detects placeholders itself. No templating config to write by hand.
-- **Single static binary.** No Python or Node runtime required to use it.
-- **Deterministic.** Same template version + same variable values → byte-identical output, every time.
+Two primitives, both usable from the CLI, the TUI, or an MCP server an agent can call directly — `snap mcp` runs over stdio and exposes the same use cases, same safety guarantees, as `plan_project`/`create_project`/`list_templates`/... tools:
+
+- **Templates** (`snap capture` / `snap new`) — capture a working project once, generate byte-identical new ones from it forever. No blank-slate re-scaffolding, no `cp -r` + grep-for-the-old-name-and-hope.
+- **Recipes** (`snap add`) — capture one verified change (new files, a dependency, an env entry, a hook) and apply it to any other existing project. An agent calls `snap add sentry` instead of re-deriving "how do I add Sentry to this stack" every single time it comes up.
+
+## Why an agent (or you) would want this
+
+- **Deterministic, not generative.** Same template/recipe version + same inputs → byte-identical output, every run — nothing to get subtly wrong on the fifth repetition.
+- **Verified once, reused forever.** A template declares `[test]` — a real build/test command run before anyone trusts it; recipes are getting the same discipline (see `PLAN-v3.md`'s M21/M22). What you're reusing already works, it didn't just look plausible to a model.
+- **A cost you can point at.** Every apply prints a token/byte receipt, and `snap stats` totals what Snap wrote instead of the agent, across both CLI and MCP — "this saves tokens" is a number, not a vibe.
+- **Capture, not authoring.** Point it at a real project or commit; it detects placeholders and dependency edits itself. No templating config to hand-write.
+- **Single static binary, deterministic output.** No Python or Node runtime required to run it.
 
 ## Install / build
 
